@@ -26,7 +26,7 @@ jq -r \
     --cache-dir=/data/restic-cache \
     --verbose \
     --exclude-file=/exclude_file \
-    backup /config /ssl /backup
+    backup /config /ssl
 )
 
 echo "Done"
