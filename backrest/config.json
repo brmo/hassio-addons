@@ -19,5 +19,9 @@
   "ports": [
     "9899:9898"
   ],
-  "image": "brmo/home-assistant-addon-{arch}-backrest"
+  "image": "brmo/home-assistant-addon-{arch}-backrest",
+  "options": {
+  },
+  "schema": {
+  }
 }
