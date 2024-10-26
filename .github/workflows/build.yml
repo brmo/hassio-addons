@@ -18,9 +18,6 @@ jobs:
         arch:
           - aarch64
           - amd64
-        exclude:
-          - addon: backrest
-            arch: aarch64
 
     steps:
       - name: Checkout repo
