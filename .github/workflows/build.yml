@@ -14,13 +14,13 @@ jobs:
       matrix:
         addon:
           - zabbix-agent2
+          - backrest
         arch:
           - aarch64
           - amd64
-          - armhf
         exclude:
-          - addon: zabbix-agent2
-            arch: armhf
+          - addon: backrest
+            arch: aarch64
 
     steps:
       - name: Checkout repo
