@@ -1,6 +1,6 @@
 {
   "name": "Backrest",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "slug": "backrest",
   "description": "Backrest",
   "url": "https://github.com/brmo/hassio-addons/tree/main/backrest",
@@ -17,7 +17,7 @@
   "startup": "system",
   "boot": "auto",
   "ports": {
-    "9899/tcp": 9898
+    "9898/tcp": 9899
   },
   "image": "brmo/home-assistant-addon-{arch}-backrest",
   "options": {
