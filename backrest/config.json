@@ -1,15 +1,17 @@
 {
   "name": "Backrest",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "slug": "backrest",
   "description": "Backrest",
   "url": "https://github.com/brmo/hassio-addons/tree/main/backrest",
+  "webui": "[PROTO:ssl]://[HOST]:[PORT:6556]",
   "init": false,
   "arch": [
     "amd64",
     "aarch64"
   ],
   "ingress": true,
+  "ingress_port": 9898,
   "map": [
     "config",
     "share"
