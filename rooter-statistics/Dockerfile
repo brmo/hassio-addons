@@ -2,8 +2,6 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
-export CONFIG_PATH=/data/options.json
-
 
 if bashio::services.available mqtt ; then
   export MQTT_HOST="$(bashio::services mqtt 'host')"
