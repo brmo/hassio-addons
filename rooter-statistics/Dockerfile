@@ -2,8 +2,10 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
-RUN apk --no-cache add ca-certificates curl bash jq yq
+#RUN apk --no-cache add ca-certificates curl bash jq yq
 
 COPY rootfs /
+
+RUN chmod +x /run.sh
 
 ENTRYPOINT ['/run.sh']
