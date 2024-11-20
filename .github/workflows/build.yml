@@ -19,7 +19,6 @@ jobs:
         arch:
           - aarch64
           - amd64
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@main

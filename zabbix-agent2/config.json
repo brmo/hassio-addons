@@ -5,11 +5,8 @@
   "description": "Zabbix agent 2",
   "url": "https://github.com/brmo/hassio-addons/tree/main/zabbix-agent2",
   "arch": [
-    "armhf",
-    "armv7",
     "aarch64",
     "amd64",
-    "i386"
   ],
   "startup": "system",
   "boot": "auto",
