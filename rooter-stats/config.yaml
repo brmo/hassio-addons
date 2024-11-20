@@ -1,0 +1,22 @@
+---
+name: Rooter Statistics
+version: 0.0.1-dev
+slug: rooter-statistics
+description: RV Rooter statistics
+url: https://github.com/brmo/hassio-addons/tree/main/rooter-statistics
+init: false
+arch:
+  - aarch64
+map:
+  - homeassistant_config
+  - share
+services:
+  - mqtt:need
+startup: services
+boot: auto
+image: brmo/home-assistant-addon-{arch}-rooterstats
+
+schema:
+  rooter_hostname: "str?"
+  rooter_username: "str?"
+  rooter_password: "password?"

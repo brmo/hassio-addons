@@ -1,0 +1,18 @@
+{
+  "name": "Rooter Statistics",
+  "version": "0.0.1-dev",
+  "slug": "rooter-statistics",
+  "description": "Grabs data from the RV router.",
+  "url": "https://github.com/brmo/hassio-addons/tree/main/rooter-stats",
+  "init": false,
+  "arch": [
+    "amd64"
+  ],
+  "map": [
+    "config",
+    "share"
+  ],
+  "startup": "system",
+  "boot": "auto",
+  "image": "brmo/home-assistant-addon-{arch}-rooterstats"
+}
