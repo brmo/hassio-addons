@@ -1,8 +1,4 @@
-#!/usr/bin/with-contenv bashio
-
-
-
-CONFIG_PATH=/data/options.json
+#!/usr/bin/env bashio
 
 
 if bashio::services.available mqtt ; then
