@@ -2,7 +2,7 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
-CONFIG_PATH=/data/options.json
+export CONFIG_PATH=/data/options.json
 
 
 if bashio::services.available mqtt ; then
