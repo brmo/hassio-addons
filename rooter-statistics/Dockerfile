@@ -6,6 +6,14 @@ FROM $BUILD_FROM
 
 COPY rootfs /
 
-RUN chmod +x /run.sh
+WORKDIR /app
 
-ENTRYPOINT ['/run.sh']
+ENV EDITOR nano
+
+RUN echo "*/1 * * * * /app/run.sh >> /var/log/cron.log 2>&1" >> /etc/crontabs/root
+
+# Give execute permissions to the script
+RUN chmod +x /app/run.sh
+
+# Set the entrypoint to start cron
+ENTRYPOINT ["crond", "-f"]
