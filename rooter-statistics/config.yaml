@@ -14,7 +14,7 @@ services:
   - mqtt:need
 startup: services
 boot: auto
-image: brmo/home-assistant-addon-{arch}-rooterstats
+image: brmo/home-assistant-addon-{arch}-rooterstatistics
 
 schema:
   rooter_hostname: "str?"
