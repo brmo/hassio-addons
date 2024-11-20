@@ -18,11 +18,11 @@
   "startup": "services",
   "boot": "auto",
   "image": "brmo/home-assistant-addon-{arch}-rooterstatistics",
-  "options": [
+  "options": {
       "rooter_hostname": "",
       "rooter_username": "",
       "rooter_password": ""
-  ],
+  },
   "schema": {
     "rooter_hostname": "str?",
     "rooter_username": "str?",
