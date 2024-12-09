@@ -4,6 +4,8 @@ FROM $BUILD_FROM
 
 #RUN apk --no-cache add ca-certificates curl bash jq yq
 
+RUN apk --no-cache add nano openssl
+
 COPY rootfs /
 
 WORKDIR /app
