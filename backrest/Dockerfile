@@ -8,9 +8,20 @@ FROM $BUILD_FROM
 #    curl -sSLf -o /usr/bin/tempio \
 #    "https://github.com/home-assistant/tempio/releases/download/${TEMPIO_VERSION}/tempio_${BUILD_ARCH}"
 
+TARGETARCH=$(uname -m| sed s/aarch64/arm64/ | sed s/x86_64/amd64/)
+
 RUN apk --no-cache add ca-certificates curl bash rclone openssh tzdata
-RUN mkdir /tmp/backrest/ && cd /tmp/ && wget https://github.com/garethgeorge/backrest/releases/download/v1.6.2/backrest_Linux_x86_64.tar.gz
-RUN cd /tmp/backrest/ && tar -zxvf /tmp/backrest_Linux_x86_64.tar.gz && cp /tmp/backrest/backrest /usr/bin/backrest
+
+RUN if [ $TARGETARCH = "arm64" ]; then \
+        mkdir /tmp/backrest/ && cd /tmp/ && wget https://github.com/garethgeorge/backrest/releases/download/v1.6.2/backrest_Linux_arm64.tar.gz \
+        cd /tmp/backrest/ && tar -zxvf /tmp/backrest_Linux_arm64.tar.gz && cp /tmp/backrest/backrest /usr/bin/backrest
+    ; fi
+    
+RUN if [ $TARGETARCH = "amd64" ]; then \
+        mkdir /tmp/backrest/ && cd /tmp/ && wget https://github.com/garethgeorge/backrest/releases/download/v1.6.2/backrest_Linux_x86_64.tar.gz \
+        cd /tmp/backrest/ && tar -zxvf /tmp/backrest_Linux_x86_64.tar.gz && cp /tmp/backrest/backrest /usr/bin/backrest
+    ; fi    
+
 RUN /usr/bin/backrest --install-deps-only
 
 # Copy root filesystem
