@@ -9,7 +9,7 @@ FROM $BUILD_FROM
 #    "https://github.com/home-assistant/tempio/releases/download/${TEMPIO_VERSION}/tempio_${BUILD_ARCH}"
 
 RUN apk --no-cache add ca-certificates curl bash rclone openssh tzdata
-RUN mkdir /tmp/backrest/ && cd /tmp/ && wget https://github.com/garethgeorge/backrest/releases/download/v1.6.1/backrest_Linux_x86_64.tar.gz
+RUN mkdir /tmp/backrest/ && cd /tmp/ && wget https://github.com/garethgeorge/backrest/releases/download/v1.6.2/backrest_Linux_x86_64.tar.gz
 RUN cd /tmp/backrest/ && tar -zxvf /tmp/backrest_Linux_x86_64.tar.gz && cp /tmp/backrest/backrest /usr/bin/backrest
 RUN /usr/bin/backrest --install-deps-only
 
