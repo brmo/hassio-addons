@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 echo $TARGETARCH
 
@@ -11,5 +12,3 @@ elif [[ $TARGETARCH = "amd64" ]]; then
 fi    
 
 /usr/bin/backrest --install-deps-only
-
-exit 0
