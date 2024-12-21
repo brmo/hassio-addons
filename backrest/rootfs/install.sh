@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 
 if [ "$TARGETARCH" == "arm64" ]; then
         mkdir /tmp/backrest/ && cd /tmp/ && wget https://github.com/garethgeorge/backrest/releases/download/v1.6.2/backrest_Linux_arm64.tar.gz && \
