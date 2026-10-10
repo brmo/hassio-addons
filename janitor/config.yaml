@@ -1,0 +1,17 @@
+name: "Janitor Service"
+description: "Home Assistant add-on for a-bali/janitor"
+slug: "janitor"
+version: "1.0.0"
+init: false
+arch:
+  - armhf
+  - armv7
+  - aarch64
+  - amd64
+  - i386
+startup: application
+boot: auto
+options:
+  log_level: info
+schema:
+  log_level: list(debug|info|notice|warning|error|fatal)=info
