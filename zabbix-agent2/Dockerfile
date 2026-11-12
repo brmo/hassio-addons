@@ -2,7 +2,7 @@ ARG BUILD_ARCH
 ARG BUILD_VERSION
 ARG BUILD_BASE_IMAGE=zabbix/zabbix-agent2:alpine-8.0-latest
 
-FROM ${BUILD_BASE_IMAGE} AS builder
+FROM ${BUILD_BASE_IMAGE}
 
 #FROM alpine:edge
 
@@ -17,7 +17,7 @@ RUN apk add --no-cache jq && \
     mkdir -p /etc/zabbix/zabbix_agent2.d/plugins.d
 
 # Copy zabbix-agent2 plugins
-COPY --from=builder ["/usr/sbin/zabbix-agent2-plugin", "/usr/sbin/zabbix-agent2-plugin"]
+#COPY --from=builder ["/usr/sbin/zabbix-agent2-plugin", "/usr/sbin/zabbix-agent2-plugin"]
 
 COPY plugins.d/apt.conf /etc/zabbix/zabbix_agent2.d/plugins.d/apt.conf
 
