@@ -1,0 +1,47 @@
+#!/usr/bin/with-contenv bashio
+# shellcheck shell=bash
+
+ZABBIX_SERVER=$(bashio::config 'server')
+ZABBIX_SERVER_ACTIVE=$(bashio::config 'serveractive')
+ZABBIX_HOSTNAME=$(bashio::config 'hostname')
+ZABBIX_TLSPSK_IDENTITY=$(bashio::config 'tlspskidentity')
+ZABBIX_TLSPSK_SECRET=$(bashio::config 'tlspsksecret')
+
+ZABBIX_CONFIG_FILE=/etc/zabbix/zabbix_agent2.conf
+
+# Route logs to container stdout/stderr so they appear in the HA Add-on Log tab
+sed -i 's@^#\?\s*\(LogType\)=.*@\1=console@' "${ZABBIX_CONFIG_FILE}"
+
+# Update core Zabbix Agent 2 settings
+sed -i "s@^#\?\s*\(Server\)=.*@\1=${ZABBIX_SERVER}@" "${ZABBIX_CONFIG_FILE}"
+sed -i "s@^#\?\s*\(ServerActive\)=.*@\1=${ZABBIX_SERVER_ACTIVE}@" "${ZABBIX_CONFIG_FILE}"
+sed -i "s@^#\?\s*\(Hostname\)=.*@\1=${ZABBIX_HOSTNAME}@" "${ZABBIX_CONFIG_FILE}"
+
+# Configure TLS PSK if both identity and secret are provided
+if bashio::config.has_value 'tlspskidentity' && bashio::config.has_value 'tlspsksecret'; then
+    ZABBIX_TLSPSK_SECRET_FILE=/etc/zabbix/tls_secret
+    printf '%s' "${ZABBIX_TLSPSK_SECRET}" > "${ZABBIX_TLSPSK_SECRET_FILE}"
+    chown zabbix:zabbix "${ZABBIX_TLSPSK_SECRET_FILE}"
+    chmod 0600 "${ZABBIX_TLSPSK_SECRET_FILE}"
+
+    sed -i 's@^#\?\s*\(TLSConnect\)=.*@\1=psk@' "${ZABBIX_CONFIG_FILE}"
+    sed -i 's@^#\?\s*\(TLSAccept\)=.*@\1=psk@' "${ZABBIX_CONFIG_FILE}"
+    sed -i "s@^#\?\s*\(TLSPSKIdentity\)=.*@\1=${ZABBIX_TLSPSK_IDENTITY}@" "${ZABBIX_CONFIG_FILE}"
+    sed -i "s@^#\?\s*\(TLSPSKFile\)=.*@\1=${ZABBIX_TLSPSK_SECRET_FILE}@" "${ZABBIX_CONFIG_FILE}"
+fi
+
+unset ZABBIX_TLSPSK_IDENTITY
+unset ZABBIX_TLSPSK_SECRET
+
+# Grant the zabbix user access to /var/run/docker.sock if mounted
+if [ -S /var/run/docker.sock ]; then
+    DOCKER_GID=$(stat -c '%g' /var/run/docker.sock)
+    if ! getent group "${DOCKER_GID}" >/dev/null 2>&1; then
+        addgroup -g "${DOCKER_GID}" -S dockerhost
+    fi
+    DOCKER_GROUP=$(getent group "${DOCKER_GID}" | cut -d: -f1)
+    addgroup zabbix "${DOCKER_GROUP}" 2>/dev/null || true
+fi
+
+bashio::log.info "Starting Zabbix Agent 2 (${ZABBIX_HOSTNAME})..."
+exec su-exec zabbix /usr/sbin/zabbix_agent2 -c "${ZABBIX_CONFIG_FILE}" -f
