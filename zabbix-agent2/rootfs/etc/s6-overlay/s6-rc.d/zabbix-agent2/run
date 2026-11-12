@@ -44,4 +44,4 @@ if [ -S /var/run/docker.sock ]; then
 fi
 
 bashio::log.info "Starting Zabbix Agent 2 (${ZABBIX_HOSTNAME})..."
-exec su-exec zabbix /usr/sbin/zabbix_agent2 -c "${ZABBIX_CONFIG_FILE}" -f
+exec s6-setuidgid zabbix /usr/sbin/zabbix_agent2 -c "${ZABBIX_CONFIG_FILE}" -f
