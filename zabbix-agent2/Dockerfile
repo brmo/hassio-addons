@@ -1,6 +1,6 @@
 ARG BUILD_ARCH
 ARG BUILD_VERSION
-ARG BUILD_BASE_IMAGE=zabbix/zabbix-agent2:alpine-8.0-latest
+ARG BUILD_BASE_IMAGE=zabbix/zabbix-agent2:alpine-8.0.0
 
 FROM ${BUILD_BASE_IMAGE}
 
