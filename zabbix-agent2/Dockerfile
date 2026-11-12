@@ -2,7 +2,7 @@ ARG BUILD_ARCH
 ARG BUILD_VERSION
 ARG BUILD_BASE_IMAGE=zabbix/zabbix-agent2:alpine-8.0-latest
 
-FROM ${BUILD_BASE_IMAGE} as builder
+FROM ${BUILD_BASE_IMAGE} AS builder
 
 FROM alpine:edge
 
