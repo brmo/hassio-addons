@@ -1,28 +1,39 @@
+# Stage 1: Pull the official multi-arch Zabbix Agent 2 Alpine image
+FROM zabbix/zabbix-agent2:alpine-8.0-latest AS zabbix
+
+# Stage 2: Home Assistant multi-arch Alpine base image
+FROM ghcr.io/home-assistant/base:latest
+
 ARG BUILD_ARCH
 ARG BUILD_VERSION
-ARG BUILD_BASE_IMAGE=zabbix/zabbix-agent2:alpine-8.0.0
 
-FROM ${BUILD_BASE_IMAGE}
+# Install runtime dependencies required by zabbix_agent2 and plugins (e.g., smartctl, docker)
+RUN apk add --no-cache \
+    bash \
+    curl \
+    jq \
+    pcre2 \
+    smartmontools \
+    zlib
 
-#FROM alpine:edge
+# Copy Zabbix Agent 2 binary, plugin binaries, and default configs from Stage 1
+COPY --from=zabbix /usr/sbin/zabbix_agent2 /usr/sbin/zabbix_agent2
+COPY --from=zabbix /usr/sbin/zabbix-agent2-plugin/ /usr/sbin/zabbix-agent2-plugin/
+COPY --from=zabbix /etc/zabbix/ /etc/zabbix/
 
-LABEL maintainer "Brian Morris <brmo@lab17.us>"
+# Create runtime directories and zabbix user/group if not present
+RUN addgroup -S zabbix 2>/dev/null || true \
+    && adduser -S -G zabbix -H -s /sbin/nologin zabbix 2>/dev/null || true \
+    && mkdir -p /var/run/zabbix /var/log/zabbix /var/lib/zabbix \
+    && chown -R zabbix:zabbix /var/run/zabbix /var/log/zabbix /var/lib/zabbix /etc/zabbix
 
-ENV LANG C.UTF-8
+# Copy your add-on rootfs (s6-overlay services / run scripts)
+COPY rootfs /
 
-# Install requirements for add-on
-RUN apk add --no-cache jq && \
-    addgroup -g 1003 docker && \
-    addgroup zabbix docker && \
-    mkdir -p /etc/zabbix/zabbix_agent2.d/plugins.d
-
-# Copy zabbix-agent2 plugins
-#COPY --from=builder ["/usr/sbin/zabbix-agent2-plugin", "/usr/sbin/zabbix-agent2-plugin"]
-
-COPY plugins.d/apt.conf /etc/zabbix/zabbix_agent2.d/plugins.d/apt.conf
-
-# Copy data for add-on
-COPY run.sh /
-RUN chmod a+x /run.sh
-
-CMD [ "/run.sh" ]
+# Standard Home Assistant labels
+LABEL \
+    io.hass.name="Zabbix Agent" \
+    io.hass.description="zabbix-agent2" \
+    io.hass.arch="${BUILD_ARCH}" \
+    io.hass.type="addon" \
+    io.hass.version="${BUILD_VERSION}"
