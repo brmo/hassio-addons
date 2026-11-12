@@ -1,6 +1,6 @@
 {
   "name": "Zabbix Agent",
-  "version": "8.0.4",
+  "version": "8.0.5",
   "slug": "zabbix-agent",
   "description": "zabbix-agent2",
   "url": "https://github.com/brmo/hassio-addons/tree/main/zabbix-agent2",
